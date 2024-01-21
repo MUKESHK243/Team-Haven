@@ -1,4 +1,5 @@
 using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,20 +14,18 @@ public class GameManager : MonoBehaviour
 
     public int currentIndex;
 
-    [SerializeField] HingeJoint door;
+    public HingeJoint door;
     
     [SerializeField] CinemachineVirtualCamera cam;
     // Start is called before the first frame update
     void Start()
     {
         currentPlayer = players[0];
-        door = GetComponent<HingeJoint>();
         
     }
     private void Update()
     {
-       
-        
+
         SwitchPlayers();
     }
 
@@ -44,8 +43,9 @@ public class GameManager : MonoBehaviour
             BasicMovement newMovement = players[currentIndex].GetComponent<BasicMovement>();
             newMovement.enabled = true;
             cam.Follow = newMovement.gameObject.transform;
-
+            
         }
+        
     }
 
     

@@ -11,10 +11,11 @@ public class CloneObjects : MonoBehaviour
     [SerializeField] GameObject parentObject;
 
     GameManager gameManager;
-
     private void Start()
     {
         gameManager =  FindObjectOfType<GameManager>();
+        
+    
     }
     private void Update()
     {

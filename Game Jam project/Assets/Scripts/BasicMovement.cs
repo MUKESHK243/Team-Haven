@@ -7,11 +7,15 @@ public class BasicMovement : MonoBehaviour
     public float moveSpeed = 10f;
     public float jumpForce = 10f;
     private bool canJump = true;
-    
+    private bool isShift = false;
+
+    OpenDoor openDoor;
+
     GameManager gameManager;
     // Start is called before the first frame update
     void Start()
     {
+        openDoor = FindObjectOfType<OpenDoor>();
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         gameManager = FindObjectOfType<GameManager>();
@@ -24,7 +28,7 @@ public class BasicMovement : MonoBehaviour
         {
             canJump = true;
         }
-        
+
         Move();
         Jump();
         ShapeShifting();
@@ -39,7 +43,7 @@ public class BasicMovement : MonoBehaviour
 
     void Jump()
     {
-        if ( Input.GetKeyDown(KeyCode.Space) && canJump)
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             canJump = false;
@@ -49,6 +53,18 @@ public class BasicMovement : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         canJump = true;
+        if (collision.gameObject.CompareTag("Lava"))
+        {
+            isShift = true;
+        }
+        if (collision.gameObject.tag == "Door" && isShift)
+        {
+
+            Destroy(gameObject);
+
+            Debug.Log("door");
+            openDoor.OpeningDoor();
+        }
     }
 
     void OnCollisionStay(Collision collision)
@@ -59,11 +75,13 @@ public class BasicMovement : MonoBehaviour
 
     void ShapeShifting()
     {
-        if (Input.GetKeyDown(KeyCode.F) && gameObject.CompareTag("Clone"))
+        if (Input.GetKeyDown(KeyCode.F) && gameObject.CompareTag("Clone") && isShift)
         {
             meshRenderer.material = gameManager.lava;
             Debug.Log("Shape Shift");
 
         }
     }
+
+   
 }
