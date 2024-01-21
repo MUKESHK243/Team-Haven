@@ -7,8 +7,9 @@ public class BasicMovement : MonoBehaviour
     public float moveSpeed = 10f;
     public float jumpForce = 10f;
     private bool canJump = true;
-    private bool isShift = false;
+    public bool isShift = false;
 
+    public GameObject particle;
     OpenDoor openDoor;
 
     GameManager gameManager;
@@ -39,6 +40,7 @@ public class BasicMovement : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         Vector3 movement = new Vector3(horizontalInput, 0, 0);
         rb.velocity = new Vector3(movement.x * moveSpeed, rb.velocity.y, 0);
+  
     }
 
     void Jump()
@@ -53,17 +55,14 @@ public class BasicMovement : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         canJump = true;
-        if (collision.gameObject.CompareTag("Lava"))
+        if (collision.gameObject.CompareTag("Lava") && gameObject.CompareTag("Clone"))
         {
+            gameManager.shapeShiftButton.SetActive(true);
             isShift = true;
         }
-        if (collision.gameObject.tag == "Door" && isShift)
+        else if (collision.gameObject.CompareTag("Lava"))
         {
-
-            Destroy(gameObject);
-
-            Debug.Log("door");
-            openDoor.OpeningDoor();
+            StartCoroutine(gameManager.ReloadScene()); 
         }
     }
 
@@ -77,11 +76,14 @@ public class BasicMovement : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F) && gameObject.CompareTag("Clone") && isShift)
         {
+            gameManager.shapeShiftButton.SetActive(false);
+            particle.SetActive(true);
+
             meshRenderer.material = gameManager.lava;
             Debug.Log("Shape Shift");
-
         }
+
     }
 
-   
+
 }

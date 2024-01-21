@@ -18,9 +18,6 @@ public class OpenDoor : MonoBehaviour
     }
     public void OpeningDoor()
     {
-      
-
-        // Check if the HingeJoint component is not null
         if (door != null)
         {
             door.useSpring = false;

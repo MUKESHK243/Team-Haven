@@ -8,6 +8,7 @@ TagManager:
   - Clone
   - Lava
   - Door
+  - Win
   layers:
   - Default
   - TransparentFX
